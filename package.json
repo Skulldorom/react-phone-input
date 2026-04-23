@@ -1,5 +1,5 @@
 {
-  "name": "react-phone-input",
+  "name": "@skulldorom/react-phone-input",
   "version": "1.0.0",
   "description": "A react component to format phone numbers",
   "main": "lib/lib.js",
@@ -9,10 +9,10 @@
     "start": "TARGET=dev_js NODE_ENV=development webpack-dev-server --progress",
     "start:css": "TARGET=dev_css NODE_ENV=development webpack-dev-server --progress",
     "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider npm run build:js && npm run build:css",
-    "build:js": "TARGET=build_js NODE_ENV=production webpack -p --progress",
-    "build:css": "TARGET=build_css NODE_ENV=production webpack -p --progress && rm ./main.js",
+    "build:js": "cross-env TARGET=build_js NODE_ENV=production webpack --progress",
+    "build:css": "cross-env TARGET=build_css NODE_ENV=production webpack --progress && node -e \"const fs=require('fs'); if (fs.existsSync('./main.js')) fs.unlinkSync('./main.js')\"",
     "prepublishOnly": "npm run build",
-    "analyze": "TARGET=analyze NODE_ENV=production webpack -p --progress"
+    "analyze": "cross-env TARGET=analyze NODE_ENV=production webpack --progress"
   },
   "repository": {
     "type": "git",
