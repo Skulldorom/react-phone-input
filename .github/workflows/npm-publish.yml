@@ -48,7 +48,7 @@ jobs:
       - run: npm run build
 
       - name: Verify build output
-        run: test -f dist/index.js || (echo "Build failed - dist/index.js not found" && exit 1)
+        run: test -f lib/lib.js || (echo "Build failed - lib/lib.js not found" && exit 1)
 
       - name: Configure Git
         run: |
