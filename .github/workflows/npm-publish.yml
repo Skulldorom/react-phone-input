@@ -86,7 +86,7 @@ jobs:
           git add package.json package-lock.json
           git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
           git tag ${{ steps.version.outputs.tag }}
-          git push origin main --follow-tags
+          git push origin HEAD --follow-tags
 
       # Create GitHub Release
       - name: Create GitHub Release
