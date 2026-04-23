@@ -1,0 +1,105 @@
+# This workflow auto-increments the version and publishes on every push to main (patch bump).
+# When triggered manually via workflow_dispatch, you can choose patch, minor, or major.
+
+name: Node.js Package
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "Version increment type"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  build-and-publish:
+    # Skip push events triggered by the version-bump commit to avoid an infinite loop.
+    # workflow_dispatch events are always allowed through.
+    if: "github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, 'chore: bump version')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Use a PAT or the default token; fetch full history for tagging
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+      - name: Verify build output
+        run: test -f dist/index.js || (echo "Build failed - dist/index.js not found" && exit 1)
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$PREV_TAG" ]; then
+            NOTES=$(git log --pretty=format:"- %s" "${PREV_TAG}..HEAD")
+          else
+            NOTES=$(git log --pretty=format:"- %s")
+          fi
+          if [ -z "$NOTES" ]; then
+            NOTES="- Dependency updates and maintenance"
+          fi
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      # Use the chosen type on manual dispatch, default to patch on push
+      - name: Bump version
+        id: version
+        run: |
+          VERSION_TYPE="${{ github.event.inputs.version_type || 'patch' }}"
+          npm version $VERSION_TYPE --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and tag version bump
+        run: |
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
+          git tag ${{ steps.version.outputs.tag }}
+          git push origin main --follow-tags
+
+      # Create GitHub Release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
+          body: |
+            ## Changes in this Release
+
+            ${{ steps.release_notes.outputs.notes }}
+          draft: false
+          prerelease: false
+
+      # Publish to NPM
+      - run: npm publish --provenance --access public
