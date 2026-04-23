@@ -1,9 +1,6 @@
-import { render, fireEvent, cleanup } from 'react-testing-library'
+import { render, fireEvent } from '@testing-library/react'
 import React from 'react'
 import PhoneInput from '../src/index'
-
-
-afterEach(cleanup)
 
 describe('<PhoneInput /> countries props', () => {
   test('has not "us" country in the dropdown', () => {

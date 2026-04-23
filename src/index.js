@@ -554,8 +554,6 @@ class PhoneInput extends React.Component {
     const { country } = this.props
     const { onlyCountries, selectedCountry, hiddenAreaCodes } = this.state
 
-    if (onChange) e.persist();
-
     if (value.length > 0) {
       // before entering the number in new format, lets check if the dial code now matches some other country
       const inputNumber = value.replace(/\D/g, '');
