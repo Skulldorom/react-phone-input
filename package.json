@@ -65,6 +65,7 @@
     "@babel/preset-react": "^7.24.0",
     "@testing-library/react": "^16.0.0",
     "babel-loader": "^9.0.0",
+    "cross-env": "^10.1.0",
     "css-loader": "^6.0.0",
     "extract-loader": "^5.0.0",
     "file-loader": "^6.0.0",
