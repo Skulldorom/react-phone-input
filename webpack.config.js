@@ -84,9 +84,10 @@ if (TARGET === "build_js" || TARGET === "analyze") {
     mode: "production",
     optimization: {},
     output: {
-      library: "ReactPhoneInput",
-      libraryTarget: "commonjs2",
-      libraryExport: "default",
+      library: {
+        type: "commonjs2",
+        export: "default",
+      },
       globalObject: "this",
     },
     externals: [
