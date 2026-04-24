@@ -1,31 +1,34 @@
 # React-Phone-Input
-Highly customizable phone input component with auto formatting.
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Skulldorom/react-phone-input#contributing)
+Highly customizable phone input component with auto formatting.
 
 ![animation](https://media.giphy.com/media/xiORAWnqoTJDsH0UOI/giphy.gif)
 
 ## Installation
+
 ```shell-script
 npm install @skulldorom/react-phone-input --save
 ```
 
 ## Usage
+
 ```jsx
-import PhoneInput from '@skulldorom/react-phone-input'
-import '@skulldorom/react-phone-input/lib/style.css'
+import PhoneInput from "@skulldorom/react-phone-input";
+import "@skulldorom/react-phone-input/lib/style.css";
 
 <PhoneInput
-  country={'us'}
+  country={"us"}
   value={this.state.phone}
-  onChange={phone => this.setState({ phone })}
-/>
+  onChange={(phone) => this.setState({ phone })}
+/>;
 ```
+
 **available styles** - style • high-res • material • bootstrap • semantic-ui • plain
 
 ![screenshot](https://raw.githubusercontent.com/Skulldorom/react-phone-input/master/test/screenshot.png)
 
 ## Options
+
 <table>
   <tr>
     <th> Name </th>
@@ -138,14 +141,15 @@ import '@skulldorom/react-phone-input/lib/style.css'
 ```jsx
 <PhoneInput
   inputProps={{
-    name: 'phone',
+    name: "phone",
     required: true,
-    autoFocus: true
+    autoFocus: true,
   }}
 />
 ```
 
 ### Contents
+
 - [Style](#style)
 - [Events](#events)
 - [Regions](#regions)
@@ -163,6 +167,7 @@ import '@skulldorom/react-phone-input/lib/style.css'
 - [Support](https://www.paypal.me/bloomber/20)
 
 ### Style
+
 <table>
   <tr>
     <td> containerClass </td>
@@ -218,6 +223,7 @@ import '@skulldorom/react-phone-input/lib/style.css'
 </table>
 
 ### Events
+
 <table>
   <tr>
     <td> onChange </td>
@@ -251,6 +257,7 @@ Country data object not returns from onKeyDown event
 </table>
 
 ### Regions
+
 <table>
   <tr>
     <th> Name </th>
@@ -292,49 +299,53 @@ Country data object not returns from onKeyDown event
 ```
 
 ### Predefined localization
+
 `es` Spanish, `de` Deutsch, `ru` Russian, `fr` French<br/>
 `jp` Japanese, `cn` Chinese, `pt` Portuguese, `it` Italian<br/>
 `ir` Iranian, `ar` Arabic, `tr` Turkish, `id` Indonesian<br/>
 `hu` Hungarian, `pl` Polish, `ko` Korean
 
 ```jsx
-import es from '@skulldorom/react-phone-input/lang/es.json'
+import es from "@skulldorom/react-phone-input/lang/es.json";
 
-<PhoneInput
-  localization={es}
-/>
+<PhoneInput localization={es} />;
 ```
 
 ### Local area codes
+
 ```jsx
 <PhoneInput
   enableAreaCodes={true}
-  enableAreaCodes={['us', 'ca']}
+  enableAreaCodes={["us", "ca"]}
   enableAreaCodeStretch
 />
 ```
 
 #### Flexible mask
+
 If `enableAreaCodeStretch` is added, the part of the mask with the area code will not stretch to length of the respective section of phone mask.
 Example: `+61 (2), +61 (02)`
 
 ### Custom masks
+
 ```jsx
 <PhoneInput
-  onlyCountries={['fr', 'at']}
-  masks={{fr: '(...) ..-..-..', at: '(....) ...-....'}}
+  onlyCountries={["fr", "at"]}
+  masks={{ fr: "(...) ..-..-..", at: "(....) ...-...." }}
 />
 ```
 
 ### Custom area codes
+
 ```jsx
 <PhoneInput
-  onlyCountries={['gr', 'fr', 'us']}
-  areaCodes={{gr: ['2694', '2647'], fr: ['369', '463'], us: ['300']}}
+  onlyCountries={["gr", "fr", "us"]}
+  areaCodes={{ gr: ["2694", "2647"], fr: ["369", "463"], us: ["300"] }}
 />
 ```
 
 ### Other props
+
 <table>
   <tr>
     <td> defaultMask </td>
@@ -404,6 +415,7 @@ Example: `+61 (2), +61 (02)`
 </table>
 
 ### Custom localization
+
 ```jsx
 <PhoneInput
   onlyCountries={['de', 'es']}
@@ -417,15 +429,18 @@ Example: `+61 (2), +61 (02)`
 ```
 
 ### Preserve countries order
+
 ```jsx
 <PhoneInput
-  onlyCountries={['fr', 'at']}
-  preserveOrder={['onlyCountries', 'preferredCountries']}
+  onlyCountries={["fr", "at"]}
+  preserveOrder={["onlyCountries", "preferredCountries"]}
 />
 ```
 
 ## Guides
+
 ### Phone without dialCode
+
 ```jsx
 handleOnChange(value, data, event, formattedValue) {
   this.setState({ rawPhone: value.slice(data.dialCode.length) })
@@ -433,13 +448,14 @@ handleOnChange(value, data, event, formattedValue) {
 ```
 
 ### Check validity of the phone number
+
 `isValid(value, country, countries, hiddenAreaCodes)`
 
 ```jsx
 <PhoneInput
   isValid={(value, country) => {
     if (value.match(/12345/)) {
-      return 'Invalid value: '+value+', '+country.name;
+      return "Invalid value: " + value + ", " + country.name;
     } else if (value.match(/1234/)) {
       return false;
     } else {
@@ -450,58 +466,73 @@ handleOnChange(value, data, event, formattedValue) {
 ```
 
 ```jsx
-import startsWith from 'lodash.startswith';
+import startsWith from "lodash.startswith";
 
 <PhoneInput
   isValid={(inputNumber, country, countries) => {
     return countries.some((country) => {
-      return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+      return (
+        startsWith(inputNumber, country.dialCode) ||
+        startsWith(country.dialCode, inputNumber)
+      );
     });
   }}
-/>
+/>;
 ```
 
 ### Clear country
+
 To clear `country`, pass `null` as `value`.
 
 ### Dynamic placeholder
+
 <details>
   <summary>Show</summary>
 
 ```jsx
-const phoneCountryFormat = useMemo(() => phoneCountry?.format || undefined, [phoneCountry]);
+const phoneCountryFormat = useMemo(
+  () => phoneCountry?.format || undefined,
+  [phoneCountry],
+);
 const placeholder = useMemo(() => {
   if (phoneCountryFormat) {
-    const words = phoneCountryFormat.split(' ');
+    const words = phoneCountryFormat.split(" ");
     words.shift(); // I'm using only local numbers so here I remove the country code from the format
-    let text = words.join(' ');
-     // first digit is special on french numbers, these 3 lines could be removed
-    if (country === 'fr') {
-      text = text.replace('.', '6');
+    let text = words.join(" ");
+    // first digit is special on french numbers, these 3 lines could be removed
+    if (country === "fr") {
+      text = text.replace(".", "6");
     }
-    while (text.indexOf('.') > -1) {
-      text = text.replace('.', `${Math.min(9, Math.max(1, Math.floor(Math.random() * 10)))}`);
+    while (text.indexOf(".") > -1) {
+      text = text.replace(
+        ".",
+        `${Math.min(9, Math.max(1, Math.floor(Math.random() * 10)))}`,
+      );
     }
     return text;
   }
-  return '';
+  return "";
 }, [phoneCountryFormat, country]);
 ```
+
 </details>
 
 ### CDN
+
 ```html
 <script src="https://unpkg.com/@skulldorom/react-phone-input@1.x/dist/lib.js"></script>
 ```
 
 ## Contributing
+
 - Code style changes not allowed
 - Do not create issues about incorrect or missing country masks (of already present countries) or absent area codes (they will be closed). Only create issues if the subject is an actual mechanism that is not present in the component. Otherwise create a PR with a link that proves the correctness of your newly suggested mask or list of area codes
 - Do not send new languages
 
 ## License
+
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Skulldorom/react-phone-input/blob/master/LICENSE)
 
 Based on [react-phone-input](https://github.com/razagill/react-phone-input)
 
-Make sure you donated for lib maintenance [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/bloomber/20)
+Make sure you donated for lib maintenance
