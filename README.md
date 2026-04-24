@@ -7,13 +7,13 @@ Highly customizable phone input component with auto formatting.
 
 ## Installation
 ```shell-script
-npm install react-phone-input --save
+npm install @skulldorom/react-phone-input --save
 ```
 
 ## Usage
 ```jsx
-import PhoneInput from 'react-phone-input'
-import 'react-phone-input/lib/style.css'
+import PhoneInput from '@skulldorom/react-phone-input'
+import '@skulldorom/react-phone-input/lib/style.css'
 
 <PhoneInput
   country={'us'}
@@ -298,7 +298,7 @@ Country data object not returns from onKeyDown event
 `hu` Hungarian, `pl` Polish, `ko` Korean
 
 ```jsx
-import es from 'react-phone-input/lang/es.json'
+import es from '@skulldorom/react-phone-input/lang/es.json'
 
 <PhoneInput
   localization={es}
@@ -491,7 +491,7 @@ const placeholder = useMemo(() => {
 
 ### CDN
 ```html
-<script src="https://unpkg.com/react-phone-input@1.x/dist/lib.js"></script>
+<script src="https://unpkg.com/@skulldorom/react-phone-input@1.x/dist/lib.js"></script>
 ```
 
 ## Contributing
